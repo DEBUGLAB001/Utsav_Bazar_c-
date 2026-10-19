@@ -26,36 +26,6 @@ Utsav Bazaar is a high-performance C++ and web application built for festival gu
 - **Test Runner**: Native C++ test executable (`tests/test_suite.cpp`) outputting structured JSON metrics.
 - **Platform Dependencies**: Winsock (`ws2_32`) on Windows platforms.
 
-### Build and Execution Commands
-
-- **Configure and Build**:
-  ```bash
-  cmake -B build -S . -DCMAKE_BUILD_TYPE=Release
-  cmake --build build -j2
-  ```
-- **Start the Server**:
-  ```bash
-  ./start.sh
-  ```
-  *Alternatively, run the compiled binary directly (default port `8080`, configurable via `$PORT`):*
-  ```bash
-  # Linux / macOS
-  PORT=8080 ./build/server
-
-  # Windows (PowerShell)
-  $env:PORT="8080"; .\build\server.exe
-  ```
-- **Run the Test Suite**:
-  ```bash
-  # Via shell script
-  bash ./tests/run_tests.sh
-
-  # Or build and execute the native test binary directly
-  cmake --build build --target challenge_tests
-  ./build/challenge_tests
-  ```
-
----
 
 ## 2. Debugging Challenge
 
@@ -114,20 +84,3 @@ Once all six defects are corrected, the application and its test suite will exhi
 5. **Resilient Order State Machine**: An order marked `Cancelled` ignores late payment provider webhooks, remaining securely `Cancelled`.
 6. **Accurate Per-Order Promotional Discounts**: Applying `DEEPA15` to two ₹1,000 orders grants ₹150 discount per order for a total savings of ₹300 (30,000 paise), correctly adhering to per-order caps.
 
-### Test Suite Verification
-
-Run the automated test runner to validate fixes:
-
-```bash
-bash tests/run_tests.sh
-```
-
-Or execute the compiled binary directly:
-
-```bash
-./build/challenge_tests
-```
-
-*Verification status:* The native test suite was executed against the initial repository codebase using `./build-clang/challenge_tests.exe`. All 6 tests failed with their respective assertion errors, confirming the presence of the six documented challenge defects.
-#   U t s a v _ B a z a r _ c -  
- 
