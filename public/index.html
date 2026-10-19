@@ -1,0 +1,64 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#102b25">
+  <title>Utsav Bazaar · Diwali Mela</title><link rel="stylesheet" href="./css/style.css"><script src="./js/app.js" defer></script>
+</head>
+<body>
+<div class="shell">
+  <aside class="sidebar">
+    <a class="brand" href="#home" data-page-link="home"><span class="brand-mark">✳</span><span><b>utsav</b><small>BAZAAR</small></span></a>
+    <div class="side-label">CELEBRATE YOUR WAY</div>
+    <nav aria-label="Main navigation">
+      <a class="nav-item active" href="#home" data-page-link="home"><span>◈</span><b>Discover</b></a>
+      <a class="nav-item" href="#gifting" data-page-link="gifting"><span>✦</span><b>Gift hampers</b></a>
+      <a class="nav-item" href="#evening" data-page-link="evening"><span>☼</span><b>Evening plan</b></a>
+      <a class="nav-item" href="#route" data-page-link="route"><span>⌖</span><b>Light trail</b></a>
+      <a class="nav-item" href="#orders" data-page-link="orders"><span>▤</span><b>Orders & checkout</b><i>1</i></a>
+    </nav>
+    <div class="side-spacer"></div>
+    <div class="side-card"><span class="live-dot"></span><span><b>Utsav services</b><small id="runtime-status">Connecting…</small></span><span class="pulse"></span></div>
+    <div class="profile"><div class="avatar">P</div><div><b>Festival guest</b><small>Diwali edition</small></div><span class="more">···</span></div>
+  </aside>
+  <main id="top">
+    <header class="topbar"><div class="crumb">Utsav Bazaar <span>/</span> <b id="page-name">Discover</b></div><div class="top-actions"><span class="season-pill"><span>✦</span> DIWALI 2026</span><button class="icon-button" aria-label="Notifications">♧<i></i></button><div class="avatar small">P</div></div></header>
+    <div class="content">
+      <section class="page active" id="page-home" data-page="home">
+        <div class="welcome"><div class="welcome-copy"><div class="eyebrow"><span class="spark">✦</span> THE FESTIVAL OF LIGHTS, YOUR WAY</div><h1>Make room for<br><em>a little more glow.</em></h1><p>Find thoughtful gifts, plan a joyful evening,<br>and bring your Diwali together in one place.</p><button class="primary-button" data-go="gifting">Create a gift hamper <span>↗</span></button></div><div class="welcome-art" aria-hidden="true"><div class="moon"></div><div class="mandala">✺</div><div class="lantern l1"><i></i></div><div class="lantern l2"><i></i></div><div class="lantern l3"><i></i></div><div class="hill hill-back"></div><div class="hill hill-front"></div><div class="rangoli">✺</div><span class="art-label">A little light<br>goes a long way</span></div></div>
+        <div class="section-heading"><div><div class="eyebrow">MADE FOR YOUR CELEBRATION</div><h2>What are we planning?</h2></div></div>
+        <div class="feature-grid">
+          <button class="feature-card gift-feature" data-go="gifting"><span class="feature-art gift-art">✦</span><span class="feature-copy"><small>THOUGHTFUL BY DESIGN</small><b>Build a gift hamper</b><span>Mix artisan favourites to fit your budget.</span><i>Start choosing ↗</i></span></button>
+          <button class="feature-card plan-feature" data-go="evening"><span class="feature-art plan-art">☼</span><span class="feature-copy"><small>MAKE AN EVENING OF IT</small><b>Plan your mela night</b><span>Find time for the experiences you love.</span><i>See the programme ↗</i></span></button>
+          <button class="feature-card route-feature" data-go="route"><span class="feature-art route-art">⌖</span><span class="feature-copy"><small>FOLLOW THE FESTIVAL GLOW</small><b>Explore the light trail</b><span>Find your way between the brightest stops.</span><i>Find a route ↗</i></span></button>
+        </div>
+        <div class="home-bottom"><article class="home-note"><span class="note-icon">✺</span><div><div class="eyebrow">A NOTE FROM THE MELA</div><h3>Small rituals. Big memories.</h3><p>Made by local artisans, shared around the table, remembered long after the last diya fades.</p></div></article><article class="home-status"><span class="online-tag"><i></i> LIVE</span><b>Your celebration, in sync</b><p>Gifting, plans, stock and order updates come straight from Utsav Bazaar services.</p></article></div>
+      </section>
+
+      <section class="page" id="page-gifting" data-page="gifting">
+        <div class="page-intro"><div class="eyebrow">ARTISAN GIFTS · MADE WITH CARE</div><h1>A hamper with <em>heart.</em></h1><p>Tell us your budget. We’ll bring together a thoughtful mix from the bazaar.</p></div>
+        <div class="builder-layout"><div class="builder-main"><div class="panel-head"><div><small>YOUR BUDGET</small><h2>Choose what feels right</h2></div><span class="soft-tag">4 artisan favourites</span></div><div class="budget-control"><label for="budget">Budget</label><div class="budget-input"><span>₹</span><input id="budget" type="number" min="100" max="10000" value="1800" inputmode="numeric"><small>INR</small></div><input id="budget-range" type="range" min="500" max="5000" step="100" value="1800"><div class="range-labels"><span>₹500</span><span>₹5,000</span></div></div><div class="product-list" id="gift-catalog"></div><button class="primary-button wide" id="build-hamper">Curate my hamper <span>✦</span></button></div><aside class="panel hamper-preview"><div class="preview-kicker"><span>✦</span> YOUR GIFT BOX</div><h2>A little joy, wrapped.</h2><p class="preview-copy">A considered collection, chosen to make every rupee count.</p><div id="hamper-items" class="selected-items"><div class="empty-state">Your hamper picks will appear here.</div></div><div class="preview-total"><span>Hamper total</span><b id="hamper-total">—</b></div><div class="preview-total joy-total"><span>Joy brought along</span><b id="hamper-joy">—</b></div><button class="secondary-button" data-go="orders">Continue to checkout <span>→</span></button></aside></div>
+      </section>
+
+      <section class="page" id="page-evening" data-page="evening">
+        <div class="page-intro"><div class="eyebrow">DIWALI MELA · TONIGHT</div><h1>Make an evening <em>of it.</em></h1><p>From the first performance to the lantern walk, find a lovely rhythm for your night.</p></div>
+        <div class="schedule-layout"><div class="panel schedule-panel"><div class="panel-head"><div><small>TONIGHT’S PROGRAMME</small><h2>Experiences around the mela</h2></div><span class="soft-tag">5:00 PM – 11:00 PM</span></div><div class="event-list" id="event-list"></div><button class="primary-button" id="plan-evening">Plan my evening <span>✦</span></button></div><aside class="panel plan-preview"><div class="preview-kicker"><span>☼</span> YOUR EVENING</div><h2>Room for the good stuff.</h2><p class="preview-copy">We’ll fit in as many of your favourite moments as time allows.</p><div id="planned-events" class="timeline"><div class="empty-state">Your evening plan will appear here.</div></div><div class="plan-foot"><span id="event-count">— experiences</span><span>Planned for tonight</span></div></aside></div>
+      </section>
+
+      <section class="page" id="page-route" data-page="route">
+        <div class="page-intro"><div class="eyebrow">UTSAV MELA · WALKING ROUTES</div><h1>Follow the <em>light.</em></h1><p>Take the brightest little walk from the Jasmine Courtyard to the Main Lantern Arch.</p></div>
+        <div class="route-layout"><div class="map-panel" id="route-map"><div class="map-top"><span class="map-label"><i></i> MELA GROUNDS</span><span class="map-scale">N ↑</span></div><div class="map-scene"><div class="map-river"></div><div class="map-path path-a"></div><div class="map-path path-b"></div><div class="map-path path-c"></div><div class="map-path path-direct"></div><div class="map-stop stop-0"><i>1</i><span>Jasmine Courtyard</span></div><div class="map-stop stop-2"><i>3</i><span>Rangoli Steps</span></div><div class="map-stop stop-1"><i>2</i><span>Main Lantern Arch</span></div><div class="map-stop stop-3"><i>4</i><span>River of Lights</span></div><span class="map-tree tree-1">✿</span><span class="map-tree tree-2">✿</span><span class="map-tree tree-3">✿</span><span class="map-lantern">✦</span></div><div class="map-legend"><span><i class="legend-dot"></i> Artisan lane</span><span><i class="legend-line"></i> Illuminated trail</span></div></div><aside class="panel route-preview"><div class="preview-kicker"><span>⌖</span> YOUR WALK</div><h2>A brighter way there.</h2><p class="preview-copy">Compare the lit paths and find the easiest way to the arch.</p><div class="route-summary"><div><small>WALKING DISTANCE</small><strong id="route-distance">—</strong></div><span class="route-sun">✦</span></div><div class="route-steps" id="route-steps"><div class="empty-state">Your route will appear here.</div></div><button class="primary-button wide" id="find-route">Find my light trail <span>→</span></button></aside></div>
+      </section>
+
+      <section class="page" id="page-orders" data-page="orders">
+        <div class="page-intro"><div class="eyebrow">YOUR UTSAV BAZAAR</div><h1>Everything in <em>one place.</em></h1><p>Keep an eye on your finds, checkout savings and delivery updates.</p></div>
+        <div class="orders-layout"><div class="orders-main"><div class="panel inventory-panel"><div class="panel-head"><div><small>ARTISAN FINDS</small><h2>A little piece of the mela</h2></div><span class="soft-tag"><i class="tiny-live"></i> Stock updates live</span></div><div class="stock-product"><div class="stock-illustration">✺</div><div class="stock-details"><b>Limited-run artisan diya</b><span>Hand-thrown clay · Painted by Meera Studio</span><small id="stock-availability">Checking availability…</small></div><button class="secondary-button reserve-button" id="reserve-diya">Reserve for me <span>→</span></button></div></div>
+          <div class="panel checkout-panel"><div class="panel-head"><div><small>YOUR CHECKOUT</small><h2>Two gifts, headed home</h2></div><span class="soft-tag">2 gift orders</span></div><div class="checkout-row"><span class="checkout-thumb thumb-1">✦</span><div><b>Lantern & mithai bundle</b><small>Gift order · for home</small></div><strong>₹1,000</strong></div><div class="checkout-row"><span class="checkout-thumb thumb-2">✺</span><div><b>Artisan welcome hamper</b><small>Gift order · for family</small></div><strong>₹1,000</strong></div><div class="coupon-entry"><div><b>DEEPA15</b><small>15% off · up to ₹200 per order</small></div><button class="secondary-button" id="apply-coupon">Apply code</button></div><div class="checkout-total"><span><b id="coupon-caption">Order total</b><small id="coupon-note">Taxes included · delivery at checkout</small></span><strong id="checkout-total">₹2,000</strong></div><div class="saving-line" id="saving-line" hidden></div><button class="primary-button wide" id="place-order">Place these gift orders <span>→</span></button></div></div>
+          <aside class="panel order-panel"><div class="preview-kicker"><span>▤</span> ORDER TRACKER</div><h2>Festival delivery</h2><p class="preview-copy">We’ll keep you posted as your order makes its way to you.</p><div class="order-id"><small>ORDER NUMBER</small><b id="order-id">Awaiting checkout</b></div><div class="order-status" id="order-status"><span class="status-dot"></span><span><b>No active order</b><small>Place your gifts to start tracking</small></span></div><div class="order-timeline"><div class="track-step" id="order-step-placed"><i>1</i><span>Order placed</span><small>Waiting for checkout</small></div><div class="track-step" id="order-step-payment"><i>2</i><span>Payment update</span><small id="payment-note">Not started</small></div><div class="track-step"><i>3</i><span>On its way</span><small>We’ll share tracking soon</small></div></div><button class="text-button" id="cancel-order" disabled>Place an order to enable updates</button><p class="fine-print" id="order-help">Place your gift orders and we’ll start tracking them here.</p></aside>
+        </div>
+      </section>
+      <footer><span>UTSAV BAZAAR <i>✦</i> MADE FOR THE FESTIVAL OF LIGHTS</span><span>YOUR CELEBRATION, IN SYNC <b>·</b> <span id="updated-at">Connecting…</span></span></footer>
+    </div>
+  </main>
+</div>
+<div class="toast" id="toast" role="status"></div>
+</body></html>
