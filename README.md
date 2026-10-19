@@ -1,86 +1,61 @@
-# Utsav Bazaar - Diwali Mela & Gifting Companion
+# Utsav Bazaar — Diwali Mela & Gifting Companion
 
-Utsav Bazaar is a high-performance C++ and web application built for festival guests at an artisan Diwali mela. It enables shoppers and festival attendees to curate personalized gift hampers within a rupee budget, plan conflict-free evening itineraries from scheduled cultural events, navigate illuminated walking trails through the mela grounds, make real-time reservations for limited-run artisan inventory, apply checkout discounts, and track order lifecycles alongside payment updates. The system couples a native C++ backend—powered by `httplib.h` and modern algorithm services—with a responsive, festive client dashboard that consumes real JSON API endpoints rather than mocking logic in the browser.
-
----
+Utsav Bazaar is an interactive festival fair companion designed for guests celebrating Diwali. It allows visitors to plan their mela experience by assembling optimized gift hampers, building conflict-free evening event schedules, discovering illuminated walking routes, reserving scarce artisan items, and managing checkout orders with promotional discounts.
 
 ## 1. Application Overview
 
 ### Core Functionality
 
-- **Artisan Gift Hamper Curation**: Evaluates artisan items (such as Kesar Mithai, Hand-painted Diyas, Silk Keepsake Scarves, and Marigold Tea Tins) against user-specified budgets ranging from ₹100 to ₹10,000, assembling a hamper that maximizes total festive "joy points" without exceeding cost limits.
-- **Festival Evening Itinerary Planning**: Schedules non-overlapping cultural activities across the evening mela programme (including opening ceremonies, craft workshops, live folk music, and lantern walks), finding an optimal sequence of events for guests.
-- **Illuminated Walking Trail Routing**: Models the mela layout as a network of festival stops (Jasmine Courtyard, Main Lantern Arch, Rangoli Steps, River of Lights) connected by illuminated pathways, computing the shortest travel time between landmarks.
-- **Limited-Edition Artisan Inventory Reservations**: Tracks live inventory for scarce handmade goods (such as limited-run hand-thrown artisan diyas) and processes reservation requests safely in concurrent environments.
-- **Promotional Coupon Discount Calculation**: Applies multi-order festive promotional codes (such as `DEEPA15` offering 15% off up to ₹200 per order) across gift orders during checkout, properly enforcing promotional discount caps.
-- **Order Lifecycle & Payment Webhook Processing**: Manages end-to-end gift order states (`Pending`, `Paid`, `Cancelled`), supporting buyer cancellation and synchronizing asynchronous webhook notifications dispatched by external payment providers.
-
-### Technology Stack
-
-- **Runtime & Language**: C++17 (compiled with GCC / Clang / MSVC).
-- **HTTP Server**: `httplib.h` (`cpp-httplib` v0.12+ single-header HTTP/HTTPS server library).
-- **Data Serialization**: `json.hpp` (Nlohmann JSON for Modern C++ v3.x single-header library).
-- **Concurrency & Multithreading**: C++ standard synchronization primitives (`<atomic>`, `<mutex>`, `<thread>`) and Windows threading APIs (`CreateThread`, `WaitForMultipleObjects`) under `_WIN32`.
-- **Frontend Dashboard**: Semantic HTML5, Vanilla CSS3 (custom dark festival theme `#102b25` with gold typography, cards, and micro-interactions), and Vanilla JavaScript (Fetch API with relative endpoints).
-- **Build System**: CMake 3.20+ with native Ninja or MinGW/Makefiles generator.
-- **Test Runner**: Native C++ test executable (`tests/test_suite.cpp`) outputting structured JSON metrics.
-- **Platform Dependencies**: Winsock (`ws2_32`) on Windows platforms.
-
+- **Artisan Gift Hamper Curation**: Assembles a tailored collection of festival gifts that maximizes joy points within a shopper's chosen rupee budget.
+- **Evening Event Itinerary Planning**: Selects a schedule of non-overlapping cultural activities across the evening, allowing guests to attend as many performances and workshops as possible.
+- **Illuminated Trail Navigation**: Determines the shortest walking route between festival landmarks across illuminated fairground pathways.
+- **Handcrafted Diya Reservations**: Manages real-time reservations for limited-run artisan diyas, ensuring fair allocation without overselling scarce inventory.
+- **Promotional Coupon Discounts**: Computes order discounts using festival coupon codes, applying discount caps per individual order.
+- **Order Lifecycle Management**: Handles gift orders through pending, paid, and cancelled stages while updating order statuses securely.
 
 ## 2. Debugging Challenge
 
-Utsav Bazaar contains six confirmed defects across its core C++ algorithmic services, concurrency primitives, and state management logic. Because the frontend relies directly on real JSON responses from the backend, each bug manifests as incorrect calculations, race conditions, or invalid state transitions visible in both the automated test suite and the interactive web dashboard.
+Utsav Bazaar contains six defects across its gift optimization, scheduling, navigation, inventory, payment, and checkout calculations. Because the web dashboard communicates with the application server, these bugs result in suboptimal planning, race conditions, and incorrect discount totals. Your goal is to investigate each problem and restore correct behavior.
 
-Your objective is to investigate the request and calculation flows across `src/service/`, resolve each underlying issue, and verify that the application satisfies all correctness guarantees.
+### Reported Issues & Tasks:
 
-### Reported Issues & Tasks
+Issue 1: Suboptimal Gift Selection Under Budget Constraints
 
-#### Issue 1: Suboptimal Gift Selection Under Budget Constraints
+- User Symptom: When generating a gift hamper with an ₹1,800 budget, the application chooses items worth only 210 joy points instead of the best combination worth 240 joy points.
+- Task: Ensure the hamper builder selects the combination of gifts that yields the highest total joy without exceeding the customer's budget.
 
-- **Reproduction**: Request a hamper recommendation for a budget of ₹1,800 (`POST /api/hamper` with `{"budget": 1800}`) or run the `gift_hamper_budget_optimization` test case with items: Kesar Mithai (cost: 700, joy: 95), Diya Set (cost: 500, joy: 80), Silk Scarf (cost: 1200, joy: 160), Marigold Tea (cost: 900, joy: 130).
-- **Failure**: The service selects items based on a greedy value-per-rupee heuristic, picking Diya Set (500) and Marigold Tea (900) for a total cost of ₹1,400 and total joy of 210 points. It fails to identify superior combinations that fit within the ₹1,800 budget.
-- **Expected**: The optimizer should find the globally optimal 0/1 knapsack combination within budget: Diya Set (cost 500, joy 80) and Silk Scarf (cost 1200, joy 160), yielding total cost 1700 (<= 1800) and a maximum joy of 240 points.
+Issue 2: Incorrect Itinerary Scheduling Prioritizing Start Times
 
-#### Issue 2: Incorrect Itinerary Scheduling Prioritizing Start Times Over Earliest Finish
+- User Symptom: Requesting an evening schedule results in a single lengthy opening ceremony being booked, blocking all other workshops and performances for the rest of the evening.
+- Task: Update the scheduling logic so attendees receive an itinerary with the maximum number of non-overlapping activities.
 
-- **Reproduction**: Generate an evening schedule from the festival events (`POST /api/itinerary`) or run `festival_itinerary_selection` with: Opening (start: 9, finish: 15), Workshop (start: 10, finish: 11), Folk Music (start: 11, finish: 12), Lantern Walk (start: 12, finish: 13).
-- **Failure**: The scheduler sorts events by earliest start time. Consequently, it selects the long opening event (9:00 to 15:00), which blocks all subsequent events and yields only 1 scheduled activity.
-- **Expected**: Interval scheduling should maximize non-overlapping events by prioritizing earliest finish times, successfully scheduling 3 distinct events (Workshop: 10–11, Folk: 11–12, Walk: 12–13).
+Issue 3: Suboptimal Walking Route Calculation on Weighted Trails
 
-#### Issue 3: Suboptimal Walking Route Calculation Using Unweighted Search Over Weighted Trails
+- User Symptom: The route planner recommends a 10-minute direct walking trail instead of a quicker 2-minute route along illuminated side paths.
+- Task: Fix the route finder to evaluate actual walking times and find the true fastest path between festival landmarks.
 
-- **Reproduction**: Find the walking route from Jasmine Courtyard (node 0) to Main Lantern Arch (node 1) via `POST /api/light-trail` or test `weighted_light_trail_route` where road 0->1 costs 10 min, road 0->2 costs 1 min, and road 2->1 costs 1 min.
-- **Failure**: The pathfinder employs unweighted Breadth-First Search (BFS), selecting the direct single-hop edge 0 -> 1 with a travel time of 10 minutes.
-- **Expected**: The algorithm should evaluate edge weights using Dijkstra's shortest path algorithm, discovering the route 0 -> 2 -> 1 with a total travel time of 2 minutes.
+Issue 4: Race Condition in Concurrent Stock Reservations
 
-#### Issue 4: Race Condition in Concurrent Limited-Stock Diya Reservations
+- User Symptom: When two shoppers simultaneously attempt to reserve the last available artisan diya, both reservations succeed and oversell the limited stock.
+- Task: Enforce atomic stock reservations so only one customer successfully reserves the final item when inventory reaches capacity.
 
-- **Reproduction**: Submit concurrent reservation requests (`POST /api/reservations` with `{"quantity": 1}`) when available inventory is 1, or execute the multi-threaded test `limited_stock_concurrent_reservations`.
-- **Failure**: The ledger checks remaining capacity and stores the updated count in two separate, non-atomic operations separated by a delay. Concurrent threads both read capacity as available, resulting in overselling (both reservations return `accepted: true`).
-- **Expected**: Stock reservation must be strictly atomic (e.g., via atomic compare-and-swap or mutex locking). Exactly one shopper must successfully reserve the final available piece, and the concurrent request must be rejected.
+Issue 5: Delayed Payment Webhook Overwrites Order Cancellation
 
-#### Issue 5: Delayed Payment Webhook Overwrites Order Cancellation State
+- User Symptom: When a customer cancels their pending gift order, a late payment notification from the payment provider reactivates the order back to paid status.
+- Task: Ensure cancelled orders remain permanently cancelled even if late payment updates are received.
 
-- **Reproduction**: Create an order, cancel it (`POST /api/orders/cancel`), and then simulate an asynchronous payment provider success notification (`POST /api/orders/payment-update`), or run `late_payment_webhook_after_cancellation`.
-- **Failure**: The payment webhook handler unconditionally overwrites the order status to `Paid`, reverting a finalized `Cancelled` order into an active paid order.
-- **Expected**: An order in `Cancelled` status is in a terminal state and must remain `Cancelled`. Delayed payment confirmations for cancelled orders must be ignored or rejected without altering terminal status.
+Issue 6: Global Coupon Discount Cap Applied Across Entire Batch
 
-#### Issue 6: Global Coupon Discount Cap Applied Across Entire Batch Instead of Per Order
-
-- **Reproduction**: Apply coupon `DEEPA15` (15% off, capped at ₹200 / 20,000 paise per order) to a checkout containing two separate ₹1,000 orders (`POST /api/coupon`) or execute `coupon_cap_applied_per_order`.
-- **Failure**: The calculator sums the percentage discounts across all orders first and then applies the ₹200 cap once to the entire aggregate sum, granting only ₹200 (20,000 paise) total discount.
-- **Expected**: The discount cap of ₹200 (20,000 paise) must apply independently to each eligible order. For two ₹1,000 orders (15% = ₹150 each), each order receives a ₹150 discount, resulting in a combined discount of ₹300 (30,000 paise).
-
----
+- User Symptom: Applying festival coupon `DEEPA15` to two separate ₹1,000 orders provides only ₹200 total discount instead of applying the discount limit per order for ₹300 total savings.
+- Task: Apply promotional discount limits separately to each qualifying order in a multi-order checkout.
 
 ## 3. Expected Behavior After Fixing Bugs
 
-Once all six defects are corrected, the application and its test suite will exhibit the following verified behaviors:
+1. Budget-based hamper curation returns the optimal gift combination (Diya Set and Silk Scarf) delivering 240 joy points for an ₹1,800 budget.
+2. Itinerary planning schedules 3 non-overlapping cultural activities during the festival evening.
+3. Walking navigation selects the shortest 2-minute route between Jasmine Courtyard and Main Lantern Arch.
+4. Concurrent inventory reservations permit only one shopper to secure the last remaining artisan diya.
+5. Cancelled orders ignore delayed payment provider notifications and remain cancelled.
+6. Promotional coupon calculations apply the discount cap independently per order, granting ₹300 total discount across two ₹1,000 orders.
 
-1. **Optimal Hamper Composition**: Requesting a gift hamper with an ₹1,800 budget yields the maximum feasible joy of 240 points by choosing the Diya Set and Silk Scarf (total cost ₹1,700).
-2. **Maximum Event Scheduling**: Generating an evening itinerary schedules 3 non-overlapping cultural experiences by ordering intervals according to earliest finish times.
-3. **True Shortest Walking Trails**: Finding the light trail from Jasmine Courtyard to Main Lantern Arch routes via Rangoli Steps (distance: 2 min) rather than the direct unweighted hop (distance: 10 min).
-4. **Thread-Safe Stock Control**: Concurrent attempts to reserve the last remaining artisan diya allow exactly one successful reservation, preventing inventory overbooking.
-5. **Resilient Order State Machine**: An order marked `Cancelled` ignores late payment provider webhooks, remaining securely `Cancelled`.
-6. **Accurate Per-Order Promotional Discounts**: Applying `DEEPA15` to two ₹1,000 orders grants ₹150 discount per order for a total savings of ₹300 (30,000 paise), correctly adhering to per-order caps.
-
+Once all issues are resolved, Utsav Bazaar will reliably provide accurate festival recommendations, fair inventory control, and correct order management.
