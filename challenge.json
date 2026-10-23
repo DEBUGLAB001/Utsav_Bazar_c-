@@ -8,5 +8,13 @@
     "start_command": "./start.sh",
     "test_command": "./tests/run_tests.sh",
     "ports": [{"container_port": 8080, "type": "preview"}]
-  }
+  },
+  "bug_topics": [
+    "0/1 Knapsack",
+    "Interval Scheduling",
+    "Shortest Path",
+    "Race Condition",
+    "State Machine",
+    "Batch Processing"
+  ]
 }
